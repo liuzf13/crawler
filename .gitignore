@@ -1,0 +1,15 @@
+#Virtual environment
+venv
+*.swp
+.DS_Store
+*.py[cod]
+*.so
+*.egg
+*.egg-info
+dist
+build
+venv.txt
+*.jpg
+*.pnj
+account.txt
+
