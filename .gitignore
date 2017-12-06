@@ -10,6 +10,6 @@ dist
 build
 venv.txt
 *.jpg
-*.pnj
+*.png
 account.txt
 
