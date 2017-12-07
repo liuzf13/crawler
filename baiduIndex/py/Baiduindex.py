@@ -229,7 +229,7 @@ def getindex(keyword, province, city, length):
         # webdriver.ActionChains(driver).move_to_element().click().perform()
         # 只有移动位置xoyelement[2]是准确的
 
-        y_0 = 205
+        y_0 = 200
         # 两个circle的间隔
         '''
         size = 0
@@ -276,17 +276,19 @@ def getindex(keyword, province, city, length):
 
         # 整体趋势
         count = 0
+        # 每次修改完区间，稍微一动一下鼠标，不然修改完的第一次可能没法查出来
+        isMove = 0 
         for i in range(length):
             
             # 不同时间，不同间隔
             if month <= 6: # 前半年
                 if year % 4 == 0:
-                    size = 6.707
+                    size = 6.70718232
                 else:
-                    size = 6.74
+                    size = 6.744444444
             else:
                 if year != 2017:
-                    size = 6.633
+                    size = 6.633879781
                 else:
                     size = 1214 / (151 + int(time.strftime("%d"))) # 这里如果到2018年了还需要修改的
 
@@ -294,10 +296,12 @@ def getindex(keyword, province, city, length):
             if count == 0:
                 x_0 = 2
             else:
-                x_0 = (count - 0.15) * size
+                x_0 = (count - 0.13) * size
 
-            #ActionChains(browser).move_to_element_with_offset(xoyelement, x_0 + 0.9*size, y_0).perform()
-            #time.sleep(1)
+            if isMove == 0:
+                ActionChains(browser).move_to_element_with_offset(xoyelement, 0.9*size, y_0).perform()
+                time.sleep(1)
+                isMove = 1
             ActionChains(browser).move_to_element_with_offset(xoyelement, x_0, y_0).perform()
 
             time.sleep(2)
@@ -306,12 +310,19 @@ def getindex(keyword, province, city, length):
             time.sleep(1)
             # 找到图片坐标
             locations = imgelement.location
-            print(locations)
+            #print(locations)
             # 找到图片大小
             #sizes = imgelement.size
             #print(sizes)
 
-            l = len(keyword)
+            temp = len(keyword)
+            l = 0
+            for c in keyword:
+                if ord(c) > 127:
+                    l += 1
+                else:
+                    l += 0.43
+            l += 1
             if l > 8:
                 l = 8
             rangle = (int(int(locations['x'])) + l * 10 + 34, int(int(locations['y'])) + 28, int(int(locations['x'])) + l * 10 + 38 + 75, int(int(locations['y'])) + 56)
@@ -327,6 +338,7 @@ def getindex(keyword, province, city, length):
                 dayName = str(day)
             name = str(year) + monthName + dayName
 
+            print(name + ":" + str(locations))
             # 截取当前浏览器
             #path = "../baidu/" + str(num)
             path = "../baidu/" + str(province) + '/' + str(city) + '/' + name
@@ -359,7 +371,7 @@ def getindex(keyword, province, city, length):
                     index.append(result)
 
                 else:
-                    index.append("")
+                    index.append(str(province) + str(city) + '-' + name + '-' + '0')
             except:
                 index.append("")
             num = num + 1
@@ -395,6 +407,7 @@ def getindex(keyword, province, city, length):
                         time.sleep(5)
 
                         count = -1
+                        isMove = 0
                 else:
                     day = 0
                     month = 1
@@ -428,6 +441,7 @@ def getindex(keyword, province, city, length):
                     time.sleep(5)
 
                     count = -1
+                    isMove = 0
 
             if year == 2017 and month == 12 and day == int(time.strftime("%d")):
                 break
@@ -438,7 +452,9 @@ def getindex(keyword, province, city, length):
             ActionChains(browser).move_to_element_with_offset(xoyelement, 0, 0).perform()
             time.sleep(1)
 
-        #  移动趋势
+
+
+        #  移动趋势 这里需要重新切换年份
         time.sleep(1)
         browser.find_element_by_class_name("icon-wise").click()
         time.sleep(2)
@@ -447,17 +463,42 @@ def getindex(keyword, province, city, length):
         day = 1
         month = 1
         count = 0
+        # 每次修改完区间，稍微一动一下鼠标，不然修改完的第一次可能没法查出来
+        isMove = 0 
+        # 第一次选择搜索时间  2011.1-2011.6
+        browser.find_elements_by_xpath("//div[@class='box-toolbar']/a")[6].click()
+        time.sleep(1)
+        browser.find_elements_by_xpath("//span[@class='selectA yearA']")[0].click()
+        time.sleep(1)
+        browser.find_element_by_xpath("//span[@class='selectA yearA slided']//div//a[@href='#" + str(year) + "']").click()
+        time.sleep(1)
+        browser.find_elements_by_xpath("//span[@class='selectA monthA']")[0].click()
+        time.sleep(1)
+        browser.find_element_by_xpath("//span[@class='selectA monthA slided']//ul//li//a[@href='#" + str(startMonth) + "']").click()
+        time.sleep(1)
+
+        browser.find_elements_by_xpath("//span[@class='selectA yearA']")[1].click()
+        time.sleep(1)
+        browser.find_element_by_xpath("//span[@class='selectA yearA slided']//div//a[@href='#" + str(year) + "']").click()
+        time.sleep(1)
+        browser.find_elements_by_xpath("//span[@class='selectA monthA']")[1].click()
+        time.sleep(1)
+        browser.find_element_by_xpath("//span[@class='selectA monthA slided']//ul//li//a[@href='#" + str(endMonth) + "']").click()
+        time.sleep(1)
+        browser.find_element_by_xpath("//input[@value='确定']").click()
+
+        time.sleep(5)
+
         for i in range(length):
-            
             # 不同时间，不同间隔
             if month <= 6: # 前半年
                 if year % 4 == 0:
-                    size = 6.707
+                    size = 6.70718232
                 else:
-                    size = 6.74
+                    size = 6.744444444
             else:
                 if year != 2017:
-                    size = 6.633
+                    size = 6.633879781
                 else:
                     size = 1214 / (151 + int(time.strftime("%d"))) # 这里如果到2018年了还需要修改的
 
@@ -467,9 +508,10 @@ def getindex(keyword, province, city, length):
             else:
                 x_0 = (count - 0.15) * size
 
-            if i == 0:
+            if isMove == 0:
                 ActionChains(browser).move_to_element_with_offset(xoyelement, 0.9*size, y_0).perform()
                 time.sleep(1)
+                isMove = 1
             ActionChains(browser).move_to_element_with_offset(xoyelement, x_0, y_0).perform()
 
             time.sleep(2)
@@ -478,7 +520,7 @@ def getindex(keyword, province, city, length):
             time.sleep(1)
             # 找到图片坐标
             locations = imgelement.location
-            print(locations)
+            #print(locations)
             # 找到图片大小
             #sizes = imgelement.size
             #print(sizes)
@@ -498,6 +540,7 @@ def getindex(keyword, province, city, length):
             else:
                 dayName = str(day)
             name = str(year) + monthName + dayName
+            print(name + ":" + str(locations))
 
             # 截取当前浏览器
             #path = "../baidu/" + str(num)
@@ -568,6 +611,7 @@ def getindex(keyword, province, city, length):
                         time.sleep(5)
 
                         count = -1
+                        isMove = 0
                 else:
                     day = 0
                     month = 1
@@ -601,6 +645,7 @@ def getindex(keyword, province, city, length):
                     time.sleep(5)
 
                     count = -1
+                    isMove = 0
 
             if year == 2017 and month == 12 and day == int(time.strftime("%d")):
                 break

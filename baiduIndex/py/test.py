@@ -3,10 +3,13 @@ from PIL import Image
 import time
 import pytesseract
 if __name__ == "__main__":
-	image = Image.open("20110101-mobilezoom.jpg")
-	print(image.format, image.size, image.mode)
-	code = pytesseract.image_to_string(image)
-	print(code)
+	keyword = "放羊的星星"
+	print(len(keyword))
+
+	#image = Image.open("20110101-mobilezoom.jpg")
+	#print(image.format, image.size, image.mode)
+	#code = pytesseract.image_to_string(image)
+	#print(code)
 	'''
 	fileaccount = open("citys.txt", encoding='UTF-8')
 	fileWrite = open("newCitys.txt", 'a', encoding='UTF-8')
