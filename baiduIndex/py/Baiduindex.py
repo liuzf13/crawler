@@ -196,52 +196,23 @@ def getindex(keyword, province, city, length):
     browser.find_element_by_xpath("//span[@class='selectA cityA slided']//div//a[@href='#" + cityDict[city] + "']").click()
     time.sleep(2)
 
+    file = open("../baidu/index.txt", "w", encoding='UTF-8')
 
 
-    # 构造天数
-    # 通过 a rel = "180" (或者24h、7、30、90、diy)来定位选择日期
-    #sel = '//a[@rel="' + str(day) + '"]'
-    #sel =  '//a[@rel="' + str(day) + '"]'
-    #browser.find_element_by_xpath(sel).click()
-    # 太快了
-    #time.sleep(2)
-
-
-    # 滑动思路：http://blog.sina.com.cn/s/blog_620987bf0102v2r8.html
-    # 滑动思路：http://blog.csdn.net/zhouxuan623/article/details/39338511
-    # 向上移动鼠标80个像素，水平方向不同
-    # ActionChains(browser).move_by_offset(0,-80).perform()
-    # <div id="trend" class="R_paper" style="height:480px;_background-color:#fff;"><svg height="460" version="1.1" width="954" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative; left: -0.5px;">
-    # <rect x="20" y="130" width="914" height="207.66666666666666" r="0" rx="0" ry="0" fill="#ff0000" stroke="none" opacity="0" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0;"></rect>
-    # xoyelement = browser.find_element_by_xpath('//rect[@stroke="none"]')
+    # 记录开始时间
+    print("开始时间：" + str(time.strftime("%H:%M:%S")))
+    file.write("开始时间：" + str(time.strftime("%H:%M:%S")) + "\n")
 
     # 找到图表框
     xoyelement = browser.find_elements_by_css_selector("#trend rect")[2]
     num = 0
-    
-    #x_0 = 5
-    #y_0 = 75
 
-    
+
+
     # 储存数字的数组
     index = []
     try:
-        # webdriver.ActionChains(driver).move_to_element().click().perform()
-        # 只有移动位置xoyelement[2]是准确的
-
-        y_0 = 200
-        # 两个circle的间隔
-        '''
-        size = 0
-        if day == 7:
-            size = 202.33
-        elif day == 30:
-            size = 41.68
-        elif day == 90:
-            size = 13.64
-        elif day == 180:
-            size = 6.78
-        '''
+        y_0 = 25
         monthDict = {'1':'31', '2':'28', '3':'31', '4':'30', '5':'31', '6':'30', '7':'31', '8':'31', '9':'30','10':'31','11':'30','12':'31'}
         year = 2011
         day = 1
@@ -258,7 +229,7 @@ def getindex(keyword, province, city, length):
         time.sleep(1)
         browser.find_elements_by_xpath("//span[@class='selectA monthA']")[0].click()
         time.sleep(1)
-        browser.find_element_by_xpath("//span[@class='selectA monthA slided']//ul//li//a[@href='#" + str(startMonth) + "']").click()
+        browser.find_element_by_xpath("//span[@class='selectA monthA slided']//ul//li//a[@href='#" + "01" + "']").click()
         time.sleep(1)
 
         browser.find_elements_by_xpath("//span[@class='selectA yearA']")[1].click()
@@ -267,12 +238,10 @@ def getindex(keyword, province, city, length):
         time.sleep(1)
         browser.find_elements_by_xpath("//span[@class='selectA monthA']")[1].click()
         time.sleep(1)
-        browser.find_element_by_xpath("//span[@class='selectA monthA slided']//ul//li//a[@href='#" + str(endMonth) + "']").click()
+        browser.find_element_by_xpath("//span[@class='selectA monthA slided']//ul//li//a[@href='#" + "06" + "']").click()
         time.sleep(1)
         browser.find_element_by_xpath("//input[@value='确定']").click()
-
         time.sleep(5)
-
 
         # 整体趋势
         count = 0
@@ -298,13 +267,18 @@ def getindex(keyword, province, city, length):
             else:
                 x_0 = (count - 0.13) * size
 
+            if count <= 8:
+                y_0 = 30
+            else:
+                y_0 = 5
+
             if isMove == 0:
                 ActionChains(browser).move_to_element_with_offset(xoyelement, 0.9*size, y_0).perform()
                 time.sleep(1)
                 isMove = 1
             ActionChains(browser).move_to_element_with_offset(xoyelement, x_0, y_0).perform()
 
-            time.sleep(2)
+            time.sleep(1)
             # <div class="imgtxt" style="margin-left:-117px;"></div> 
             imgelement = browser.find_element_by_xpath('//div[@id="viewbox"]')
             time.sleep(1)
@@ -385,19 +359,19 @@ def getindex(keyword, province, city, length):
                     if month == 7:
                         browser.find_elements_by_xpath("//div[@class='box-toolbar']/a")[6].click()
                         time.sleep(1)
-                        browser.find_elements_by_xpath("//span[@class='selectA yearA']")[0].click()
-                        time.sleep(1)
-                        browser.find_element_by_xpath("//span[@class='selectA yearA slided']//div//a[@href='#" + str(year) + "']").click()
-                        time.sleep(1)
+                        #browser.find_elements_by_xpath("//span[@class='selectA yearA']")[0].click()
+                        #time.sleep(1)
+                        #browser.find_element_by_xpath("//span[@class='selectA yearA slided']//div//a[@href='#" + str(year) + "']").click()
+                        #time.sleep(1)
                         browser.find_elements_by_xpath("//span[@class='selectA monthA']")[0].click()
                         time.sleep(1)
                         browser.find_element_by_xpath("//span[@class='selectA monthA slided']//ul//li//a[@href='#" + "07" + "']").click()
                         time.sleep(1)
 
-                        browser.find_elements_by_xpath("//span[@class='selectA yearA']")[1].click()
-                        time.sleep(1)
-                        browser.find_element_by_xpath("//span[@class='selectA yearA slided']//div//a[@href='#" + str(year) + "']").click()
-                        time.sleep(1)
+                        #browser.find_elements_by_xpath("//span[@class='selectA yearA']")[1].click()
+                        #time.sleep(1)
+                        #browser.find_element_by_xpath("//span[@class='selectA yearA slided']//div//a[@href='#" + str(year) + "']").click()
+                        #time.sleep(1)
                         browser.find_elements_by_xpath("//span[@class='selectA monthA']")[1].click()
                         time.sleep(1)
                         browser.find_element_by_xpath("//span[@class='selectA monthA slided']//ul//li//a[@href='#" + "12" + "']").click()
@@ -417,6 +391,22 @@ def getindex(keyword, province, city, length):
                     else:
                         monthDict['2'] = '28'
 
+
+                    # 重新加载网站
+                    browser.find_element_by_id("schword").clear()
+                    time.sleep(1)
+                    browser.find_element_by_id("schword").send_keys(keyword)
+                    browser.find_element_by_id("schsubmit").click()
+                    time.sleep(3)
+                    browser.find_element_by_id("compOtharea").click()
+                    time.sleep(1)
+                    browser.find_element_by_xpath("//span[@class='selectA provA slided']//div//a[@href='#" + provinceDict[province] + "']").click()
+                    time.sleep(1)
+                    browser.find_element_by_xpath("//span[@class='selectA cityA slided']//div//a[@href='#" + cityDict[city] + "']").click()
+                    time.sleep(2)
+                    xoyelement = browser.find_elements_by_css_selector("#trend rect")[2]
+
+                    # 更新日期
                     browser.find_elements_by_xpath("//div[@class='box-toolbar']/a")[6].click()
                     time.sleep(1)
                     browser.find_elements_by_xpath("//span[@class='selectA yearA']")[0].click()
@@ -458,7 +448,7 @@ def getindex(keyword, province, city, length):
         time.sleep(1)
         browser.find_element_by_class_name("icon-wise").click()
         time.sleep(2)
-        y_0 = 200
+        y_0 = 25
         year = 2011
         day = 1
         month = 1
@@ -506,7 +496,7 @@ def getindex(keyword, province, city, length):
             if count == 0:
                 x_0 = 2
             else:
-                x_0 = (count - 0.15) * size
+                x_0 = (count - 0.13) * size
 
             if isMove == 0:
                 ActionChains(browser).move_to_element_with_offset(xoyelement, 0.9*size, y_0).perform()
@@ -514,7 +504,7 @@ def getindex(keyword, province, city, length):
                 isMove = 1
             ActionChains(browser).move_to_element_with_offset(xoyelement, x_0, y_0).perform()
 
-            time.sleep(2)
+            time.sleep(1)
             # <div class="imgtxt" style="margin-left:-117px;"></div> 
             imgelement = browser.find_element_by_xpath('//div[@id="viewbox"]')
             time.sleep(1)
@@ -529,7 +519,7 @@ def getindex(keyword, province, city, length):
             if l > 8:
                 l = 8
             rangle = (int(int(locations['x'])) + l * 10 + 34, int(int(locations['y'])) + 28, int(int(locations['x'])) + l * 10 + 38 + 75, int(int(locations['y'])) + 56)
-            
+
 
             if month < 10:
                 monthName = '0' + str(month)
@@ -589,19 +579,19 @@ def getindex(keyword, province, city, length):
                     if month == 7:
                         browser.find_elements_by_xpath("//div[@class='box-toolbar']/a")[6].click()
                         time.sleep(1)
-                        browser.find_elements_by_xpath("//span[@class='selectA yearA']")[0].click()
-                        time.sleep(1)
-                        browser.find_element_by_xpath("//span[@class='selectA yearA slided']//div//a[@href='#" + str(year) + "']").click()
-                        time.sleep(1)
+                        #browser.find_elements_by_xpath("//span[@class='selectA yearA']")[0].click()
+                        #time.sleep(1)
+                        #browser.find_element_by_xpath("//span[@class='selectA yearA slided']//div//a[@href='#" + str(year) + "']").click()
+                        #time.sleep(1)
                         browser.find_elements_by_xpath("//span[@class='selectA monthA']")[0].click()
                         time.sleep(1)
                         browser.find_element_by_xpath("//span[@class='selectA monthA slided']//ul//li//a[@href='#" + "07" + "']").click()
                         time.sleep(1)
 
-                        browser.find_elements_by_xpath("//span[@class='selectA yearA']")[1].click()
-                        time.sleep(1)
-                        browser.find_element_by_xpath("//span[@class='selectA yearA slided']//div//a[@href='#" + str(year) + "']").click()
-                        time.sleep(1)
+                        #browser.find_elements_by_xpath("//span[@class='selectA yearA']")[1].click()
+                        #time.sleep(1)
+                        #browser.find_element_by_xpath("//span[@class='selectA yearA slided']//div//a[@href='#" + str(year) + "']").click()
+                        #time.sleep(1)
                         browser.find_elements_by_xpath("//span[@class='selectA monthA']")[1].click()
                         time.sleep(1)
                         browser.find_element_by_xpath("//span[@class='selectA monthA slided']//ul//li//a[@href='#" + "12" + "']").click()
@@ -620,6 +610,20 @@ def getindex(keyword, province, city, length):
                         monthDict['2'] = '29'
                     else:
                         monthDict['2'] = '28'
+
+                    # 重新加载网站
+                    browser.find_element_by_id("schword").clear()
+                    time.sleep(1)
+                    browser.find_element_by_id("schword").send_keys(keyword)
+                    browser.find_element_by_id("schsubmit").click()
+                    time.sleep(3)
+                    browser.find_element_by_id("compOtharea").click()
+                    time.sleep(1)
+                    browser.find_element_by_xpath("//span[@class='selectA provA slided']//div//a[@href='#" + provinceDict[province] + "']").click()
+                    time.sleep(1)
+                    browser.find_element_by_xpath("//span[@class='selectA cityA slided']//div//a[@href='#" + cityDict[city] + "']").click()
+                    time.sleep(2)
+                    xoyelement = browser.find_elements_by_css_selector("#trend rect")[2]
 
                     browser.find_elements_by_xpath("//div[@class='box-toolbar']/a")[6].click()
                     time.sleep(1)
@@ -652,12 +656,9 @@ def getindex(keyword, province, city, length):
 
             day += 1
             count += 1
-            
+
             ActionChains(browser).move_to_element_with_offset(xoyelement, 0, 0).perform()
             time.sleep(1)
-
-
-    
     except Exception as err:
         print(err)
         print(num)
@@ -665,7 +666,8 @@ def getindex(keyword, province, city, length):
     print(index)
     # 日期也是可以图像识别下来的
     # 只是要构造rangle就行，但是我就是懒
-    file = open("../baidu/index.txt", "w", encoding='UTF-8')
+    print("完成时间：" + str(time.strftime("%H:%M:%S")))
+    file.write("完成时间：" + str(time.strftime("%H:%M:%S")) + "\n")
     for item in index:
         file.write(str(item) + "\n")
     file.close()

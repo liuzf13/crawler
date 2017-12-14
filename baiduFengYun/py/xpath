@@ -1,0 +1,58 @@
+//*[@id="main-nav"]/li[10]/a   地域风向标
+//*[@id="provinceSel"]/div[3]/div[1]/ul/li[4]  热点
+
+左边选择省份  //*[@id="provinceSel"]/div[3]/div[2]/div[1]/div/div[1]/div
+左边选择城市  //*[@id="provinceSel"]/div[3]/div[2]/div[1]/div/div[2]/div
+
+中间选择省份  //*[@id="provinceSel"]/div[3]/div[2]/div[2]/div/div[1]/div
+中间选择城市  //*[@id="provinceSel"]/div[3]/div[2]/div[2]/div/div[2]/div
+
+右边选择省份  //*[@id="provinceSel"]/div[3]/div[2]/div[3]/div/div[1]/div
+右边选择城市  //*[@id="provinceSel"]/div[3]/div[2]/div[3]/div/div[2]/div
+
+省份 城市
+browser.find_element_by_xpath("//div[@id='shengPanel']//a[@val='" + provinceDict[province] + "']").click()
+browser.find_element_by_xpath("//div[@id='shiPanel']//a[@val='" + cityDict[city] + "']").click()
+
+
+
+最左边的城市
+关键词
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[2]/div[1]/div[2]/ul/li[1]/div/a 
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[2]/div[1]/div[2]/ul/li[2]/div/a
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[2]/div[1]/div[2]/ul/li[3]/div/a
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[2]/div[1]/div[2]/ul/li[50]/div/a
+
+关注度
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[1]/div[1]/div[2]/ul/li[1]/div/div/span
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[1]/div[1]/div[2]/ul/li[2]/div/div/span
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[1]/div[1]/div[2]/ul/li[3]/div/div/span
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[1]/div[1]/div[2]/ul/li[50]/div/div/span
+
+
+中间城市
+关键词
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[2]/div[2]/div[2]/ul/li[1]/div/a
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[2]/div[2]/div[2]/ul/li[2]/div/a
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[2]/div[2]/div[2]/ul/li[3]/div/a
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[2]/div[2]/div[2]/ul/li[50]/div/a
+
+关注度
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[1]/div[2]/div[2]/ul/li[1]/div/div/span
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[1]/div[2]/div[2]/ul/li[2]/div/div/span
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[1]/div[2]/div[2]/ul/li[3]/div/div/span
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[1]/div[2]/div[2]/ul/li[50]/div/div/span
+
+
+右边城市
+关键词
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[2]/div[3]/div[2]/ul/li[1]/div/a
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[2]/div[3]/div[2]/ul/li[2]/div/a
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[2]/div[3]/div[2]/ul/li[3]/div/a
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[2]/div[3]/div[2]/ul/li[50]/div/a
+
+关注度
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[1]/div[3]/div[2]/ul/li[1]/div/div/span
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[1]/div[3]/div[2]/ul/li[2]/div/div/span
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[1]/div[3]/div[2]/ul/li[3]/div/div/span
+//*[@id="provinceSel"]/div[3]/div[3]/div[4]/div[2]/div[1]/div[3]/div[2]/ul/li[50]/div/div/span

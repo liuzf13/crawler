@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 from PIL import Image
 import time
+import datetime
 import pytesseract
 if __name__ == "__main__":
-	keyword = "放羊的星星"
-	print(len(keyword))
+	#for i in range(7):
+	#	print(i)
+	print(time.strftime("%H:%M:%S"))
+	#keyword = "放羊的星星"
+	#print(len(keyword))
 
 	#image = Image.open("20110101-mobilezoom.jpg")
 	#print(image.format, image.size, image.mode)
