@@ -12,6 +12,8 @@ venv.txt
 *.jpg
 *.png
 *.log
-*.txt
 account.txt
+result.txt
+*.txt
+
 
