@@ -198,7 +198,7 @@ def getindex(keyword, province, city, length):
 
     file = open("../baidu/index.txt", "w", encoding='UTF-8')
 
-
+    
     # 记录开始时间
     print("开始时间：" + str(time.strftime("%H:%M:%S")))
     file.write("开始时间：" + str(time.strftime("%H:%M:%S")) + "\n")
@@ -208,13 +208,14 @@ def getindex(keyword, province, city, length):
     num = 0
 
 
+    
 
     # 储存数字的数组
     index = []
     try:
         y_0 = 25
         monthDict = {'1':'31', '2':'28', '3':'31', '4':'30', '5':'31', '6':'30', '7':'31', '8':'31', '9':'30','10':'31','11':'30','12':'31'}
-        year = 2011
+        year = 2017
         day = 1
         month = 1
         startMonth = "0" + str(month)
@@ -259,7 +260,7 @@ def getindex(keyword, province, city, length):
                 if year != 2017:
                     size = 6.633879781
                 else:
-                    size = 1214 / (151 + int(time.strftime("%d"))) # 这里如果到2018年了还需要修改的
+                    size = 1214 / (153 + int(time.strftime("%d")) - 2 - 1) # 这里如果到2018年了还需要修改的
 
             # 坐标偏移量
             if count == 0:
@@ -277,7 +278,6 @@ def getindex(keyword, province, city, length):
                 time.sleep(1)
                 isMove = 1
             ActionChains(browser).move_to_element_with_offset(xoyelement, x_0, y_0).perform()
-
             time.sleep(1)
             # <div class="imgtxt" style="margin-left:-117px;"></div> 
             imgelement = browser.find_element_by_xpath('//div[@id="viewbox"]')
@@ -391,13 +391,23 @@ def getindex(keyword, province, city, length):
                     else:
                         monthDict['2'] = '28'
 
-
                     # 重新加载网站
+                    js = 'window.open("http://index.baidu.com");'
+                    browser.execute_script(js)
+                    handles = browser.window_handles
+                    browser.switch_to_window(handles[-1])
+                    time.sleep(5)
                     browser.find_element_by_id("schword").clear()
-                    time.sleep(1)
                     browser.find_element_by_id("schword").send_keys(keyword)
-                    browser.find_element_by_id("schsubmit").click()
-                    time.sleep(3)
+                    time.sleep(1)
+                    browser.find_element_by_id("searchWords").click()
+                    time.sleep(5)
+                    
+                    #browser.find_element_by_id("schword").clear()
+                    #time.sleep(1)
+                    #browser.find_element_by_id("schword").send_keys(keyword)
+                    #browser.find_element_by_id("schsubmit").click()
+                    #time.sleep(3)
                     browser.find_element_by_id("compOtharea").click()
                     time.sleep(1)
                     browser.find_element_by_xpath("//span[@class='selectA provA slided']//div//a[@href='#" + provinceDict[province] + "']").click()
@@ -405,6 +415,7 @@ def getindex(keyword, province, city, length):
                     browser.find_element_by_xpath("//span[@class='selectA cityA slided']//div//a[@href='#" + cityDict[city] + "']").click()
                     time.sleep(2)
                     xoyelement = browser.find_elements_by_css_selector("#trend rect")[2]
+                    time.sleep(5)
 
                     # 更新日期
                     browser.find_elements_by_xpath("//div[@class='box-toolbar']/a")[6].click()
@@ -433,7 +444,7 @@ def getindex(keyword, province, city, length):
                     count = -1
                     isMove = 0
 
-            if year == 2017 and month == 12 and day == int(time.strftime("%d")):
+            if year == 2017 and month == 12 and day == int(time.strftime("%d")) - 2:
                 break
 
             day += 1
@@ -445,8 +456,7 @@ def getindex(keyword, province, city, length):
 
 
         #  移动趋势 这里需要重新切换年份
-        time.sleep(1)
-        browser.find_element_by_class_name("icon-wise").click()
+        print("mobile")
         time.sleep(2)
         y_0 = 25
         year = 2011
@@ -455,6 +465,37 @@ def getindex(keyword, province, city, length):
         count = 0
         # 每次修改完区间，稍微一动一下鼠标，不然修改完的第一次可能没法查出来
         isMove = 0 
+
+        # 重新加载网站
+        js = 'window.open("http://index.baidu.com");'
+        browser.execute_script(js)
+        handles = browser.window_handles
+        browser.switch_to_window(handles[-1])
+        time.sleep(5)
+        browser.find_element_by_id("schword").clear()
+        browser.find_element_by_id("schword").send_keys(keyword)
+        time.sleep(1)
+        browser.find_element_by_id("searchWords").click()
+        time.sleep(5)
+
+        #browser.find_element_by_id("schword").clear()
+        #time.sleep(1)
+        #browser.find_element_by_id("schword").send_keys(keyword)
+        #browser.find_element_by_id("schsubmit").click()
+        #time.sleep(3)
+        browser.find_element_by_id("compOtharea").click()
+        time.sleep(1)
+        browser.find_element_by_xpath("//span[@class='selectA provA slided']//div//a[@href='#" + provinceDict[province] + "']").click()
+        time.sleep(1)
+        browser.find_element_by_xpath("//span[@class='selectA cityA slided']//div//a[@href='#" + cityDict[city] + "']").click()
+        time.sleep(2)
+        xoyelement = browser.find_elements_by_css_selector("#trend rect")[2]
+        time.sleep(5)
+
+        # 选择移动趋势
+        browser.find_element_by_class_name("icon-wise").click()
+        time.sleep(1)
+
         # 第一次选择搜索时间  2011.1-2011.6
         browser.find_elements_by_xpath("//div[@class='box-toolbar']/a")[6].click()
         time.sleep(1)
@@ -464,7 +505,7 @@ def getindex(keyword, province, city, length):
         time.sleep(1)
         browser.find_elements_by_xpath("//span[@class='selectA monthA']")[0].click()
         time.sleep(1)
-        browser.find_element_by_xpath("//span[@class='selectA monthA slided']//ul//li//a[@href='#" + str(startMonth) + "']").click()
+        browser.find_element_by_xpath("//span[@class='selectA monthA slided']//ul//li//a[@href='#" + "01" + "']").click()
         time.sleep(1)
 
         browser.find_elements_by_xpath("//span[@class='selectA yearA']")[1].click()
@@ -473,7 +514,7 @@ def getindex(keyword, province, city, length):
         time.sleep(1)
         browser.find_elements_by_xpath("//span[@class='selectA monthA']")[1].click()
         time.sleep(1)
-        browser.find_element_by_xpath("//span[@class='selectA monthA slided']//ul//li//a[@href='#" + str(endMonth) + "']").click()
+        browser.find_element_by_xpath("//span[@class='selectA monthA slided']//ul//li//a[@href='#" + "06" + "']").click()
         time.sleep(1)
         browser.find_element_by_xpath("//input[@value='确定']").click()
 
@@ -490,13 +531,18 @@ def getindex(keyword, province, city, length):
                 if year != 2017:
                     size = 6.633879781
                 else:
-                    size = 1214 / (151 + int(time.strftime("%d"))) # 这里如果到2018年了还需要修改的
+                    size = 1214 / (153 + int(time.strftime("%d")) - 2 - 1) # 这里如果到2018年了还需要修改的
 
             # 坐标偏移量
             if count == 0:
                 x_0 = 2
             else:
                 x_0 = (count - 0.13) * size
+
+            if count <= 8:
+                y_0 = 30
+            else:
+                y_0 = 5
 
             if isMove == 0:
                 ActionChains(browser).move_to_element_with_offset(xoyelement, 0.9*size, y_0).perform()
@@ -561,13 +607,18 @@ def getindex(keyword, province, city, length):
                     code = code.replace("S", '5').replace("?", '7').replace(" ", "").replace(",", "").replace("E", "8").replace(".", "").replace("'", "").replace(u"‘", "")\
                     .replace("B", "8").replace("\"", "").replace("I", "1").replace("i", "").replace("-", "").replace("$", "8").replace(u"’", "").strip()
                     print(code)
-                    index[count] += str(code)
-                    print(index[count])
+                    index[i] += str(code)
+                    print(index[i])
+                    #result = str(province) + str(city) + '-' + name + '-' + code
+                    #index.append(result)
+
 
                 else:
-                    index[count] += '-0'
+                    index[i] += '-0'
+                    #result = str(province) + str(city) + '-' + name + '-0'
+                    #index.append(result)
             except:
-                index[count] += ''
+                index[i] += ''
             num = num + 1
 
             # 下面是日期修改
@@ -612,11 +663,22 @@ def getindex(keyword, province, city, length):
                         monthDict['2'] = '28'
 
                     # 重新加载网站
+                    js = 'window.open("http://index.baidu.com");'
+                    browser.execute_script(js)
+                    handles = browser.window_handles
+                    browser.switch_to_window(handles[-1])
+                    time.sleep(5)
                     browser.find_element_by_id("schword").clear()
-                    time.sleep(1)
                     browser.find_element_by_id("schword").send_keys(keyword)
-                    browser.find_element_by_id("schsubmit").click()
-                    time.sleep(3)
+                    time.sleep(1)
+                    browser.find_element_by_id("searchWords").click()
+                    time.sleep(5)
+                    
+                    #browser.find_element_by_id("schword").clear()
+                    #time.sleep(1)
+                    #browser.find_element_by_id("schword").send_keys(keyword)
+                    #browser.find_element_by_id("schsubmit").click()
+                    #time.sleep(3)
                     browser.find_element_by_id("compOtharea").click()
                     time.sleep(1)
                     browser.find_element_by_xpath("//span[@class='selectA provA slided']//div//a[@href='#" + provinceDict[province] + "']").click()
@@ -624,7 +686,14 @@ def getindex(keyword, province, city, length):
                     browser.find_element_by_xpath("//span[@class='selectA cityA slided']//div//a[@href='#" + cityDict[city] + "']").click()
                     time.sleep(2)
                     xoyelement = browser.find_elements_by_css_selector("#trend rect")[2]
+                    time.sleep(5)
 
+
+                    # 选择移动趋势
+                    browser.find_element_by_class_name("icon-wise").click()
+                    time.sleep(1)
+
+                    # 更新日期
                     browser.find_elements_by_xpath("//div[@class='box-toolbar']/a")[6].click()
                     time.sleep(1)
                     browser.find_elements_by_xpath("//span[@class='selectA yearA']")[0].click()
@@ -651,7 +720,7 @@ def getindex(keyword, province, city, length):
                     count = -1
                     isMove = 0
 
-            if year == 2017 and month == 12 and day == int(time.strftime("%d")):
+            if year == 2017 and month == 12 and day == int(time.strftime("%d")) - 2:
                 break
 
             day += 1

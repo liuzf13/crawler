@@ -17,6 +17,7 @@ import pytesseract
 import os
 
 
+#def getInfomation(province, city, province2, city2, province3, city3):
 def getInfomation(province, city):
     global browser
     url = "http://top.baidu.com/"
@@ -87,26 +88,70 @@ def getInfomation(province, city):
     time.sleep(1)
     browser.find_element_by_xpath("//div[@id='shengPanel']//a[@val='" + provinceDict[province] + "']").click()
     time.sleep(1)
-
     # 选择最左边的城市
     browser.find_element_by_xpath("//*[@id='provinceSel']/div[3]/div[2]/div[1]/div/div[2]/div").click()
     time.sleep(1)
     browser.find_element_by_xpath("//div[@id='shiPanel']//a[@val='" + cityDict[city] + "']").click()
-    time.sleep(1)
+    time.sleep(3)
+
+    # 关键词
+    result = []
+    count = 1
+    while count <= 50:
+        # 排名
+        item = str(count) + " "
+        # 关键词
+        keyWordPath = "//*[@id='provinceSel']/div[3]/div[3]/div[4]/div[2]/div[2]/div[1]/div[2]/ul/li[" + str(count) + "]/div/a"
+        item += browser.find_element_by_xpath(keyWordPath).text
+        item += " "
+        # 关注度
+        focusPath = "//*[@id='provinceSel']/div[3]/div[3]/div[4]/div[2]/div[1]/div[1]/div[2]/ul/li[" + str(count) + "]/div/div/span"
+        focus = browser.find_element_by_xpath(focusPath)
+        browser.execute_script("alert(window.getComputedStyle(arguments[0],false).width);", focus)
+        alert = browser.switch_to_alert()
+        time.sleep(0.8)
+        test = alert.text
+        alert.accept()
+        #temp = float(test.replace("px" , '')) / 97 * 100
+        #percent = str(float('%.2f' % temp))
+
+        item += str(test)
+        print(item)
+        count += 1
+
     '''
-    browser.find_element_by_id("compOtharea").click()
+    # 选择中间的的省份
+    browser.find_element_by_xpath("//*[@id='provinceSel']/div[3]/div[2]/div[2]/div/div[1]/div").click()
     time.sleep(1)
-    browser.find_element_by_xpath("//span[@class='selectA provA slided']//div//a[@href='#" + provinceDict[province] + "']").click()
-    browser.find_element_by_xpath("//div[@id='shengPanel']//a[@val='#" + provinceDict[province] + "']").click()
+    browser.find_element_by_xpath("//div[@id='shengPanel']//a[@val='" + provinceDict[province2] + "']").click()
     time.sleep(1)
-    browser.find_element_by_xpath("//span[@class='selectA cityA slided']//div//a[@href='#" + cityDict[city] + "']").click()
-    time.sleep(2)
+    # 选择中间的的城市
+    browser.find_element_by_xpath("//*[@id='provinceSel']/div[3]/div[2]/div[2]/div/div[2]/div").click()
+    time.sleep(1)
+    browser.find_element_by_xpath("//div[@id='shiPanel']//a[@val='" + cityDict[city2] + "']").click()
+    time.sleep(3)
+
+    # 选择最右边的省份
+    browser.find_element_by_xpath("//*[@id='provinceSel']/div[3]/div[2]/div[3]/div/div[1]/div").click()
+    time.sleep(1)
+    browser.find_element_by_xpath("//div[@id='shengPanel']//a[@val='" + provinceDict[province3] + "']").click()
+    time.sleep(1)
+    # 选择最右边的城市
+    browser.find_element_by_xpath("//*[@id='provinceSel']/div[3]/div[2]/div[3]/div/div[2]/div").click()
+    time.sleep(1)
+    browser.find_element_by_xpath("//div[@id='shiPanel']//a[@val='" + cityDict[city3] + "']").click()
+    time.sleep(3)
     '''
 
 
 
 
 if __name__ == "__main__":
-    province = input("请输入省份：")
-    city = input("请输入城市：")
+    province = input("请输入第一个省份：")
+    city = input("请输入第一个城市：")
+    #province2 = input("请输入第二个省份：")
+    #city2 = input("请输入第二个城市：")
+    #province3 = input("请输入第三个省份：")
+    #city3 = input("请输入第三个城市：")
+    #getInfomation(province, city, province2, city2, province3, city3)
     getInfomation(province, city)

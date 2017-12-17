@@ -4,9 +4,10 @@ import time
 import datetime
 import pytesseract
 if __name__ == "__main__":
+	print(1214 / (151 + int(time.strftime("%d"))))
 	#for i in range(7):
 	#	print(i)
-	print(time.strftime("%H:%M:%S"))
+	#print(time.strftime("%H:%M:%S"))
 	#keyword = "放羊的星星"
 	#print(len(keyword))
 
