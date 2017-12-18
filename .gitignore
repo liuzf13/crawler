@@ -1,6 +1,7 @@
 #Virtual environment
 venv
 *.swp
+*.txt
 .DS_Store
 *.py[cod]
 *.so
@@ -14,6 +15,6 @@ venv.txt
 *.log
 account.txt
 result.txt
-*.txt
+
 
 

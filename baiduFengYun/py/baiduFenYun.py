@@ -18,7 +18,7 @@ import os
 
 
 #def getInfomation(province, city, province2, city2, province3, city3):
-def getInfomation(province, city):
+def getInfomation(province, city, province2, city2, province3, city3):
     global browser
     url = "http://top.baidu.com/"
     # 打开谷歌浏览器
@@ -83,6 +83,9 @@ def getInfomation(province, city):
     '玉溪':'123','曲靖':'339','大理':'334','文山':'437','保山':'438','丽江':'342','昭通':'335','思茅':'662','临沧':'350','楚雄':'124','杭州':'138','温州':'149',
     '宁波':'289','金华':'135','台州':'287','嘉兴':'304','绍兴':'303','湖州':'305','丽水':'134','衢州':'288','舟山':'306'}
 
+    file = open("../baidu/result.txt", "w", encoding='UTF-8')
+
+    
     # 选择最左边的省份
     browser.find_element_by_xpath("//*[@id='provinceSel']/div[3]/div[2]/div[1]/div/div[1]/div").click()
     time.sleep(1)
@@ -94,8 +97,9 @@ def getInfomation(province, city):
     browser.find_element_by_xpath("//div[@id='shiPanel']//a[@val='" + cityDict[city] + "']").click()
     time.sleep(3)
 
+    file.write(province + "-" + city)
+    file.write("\n")
     # 关键词
-    result = []
     count = 1
     while count <= 50:
         # 排名
@@ -105,21 +109,27 @@ def getInfomation(province, city):
         item += browser.find_element_by_xpath(keyWordPath).text
         item += " "
         # 关注度
-        focusPath = "//*[@id='provinceSel']/div[3]/div[3]/div[4]/div[2]/div[1]/div[1]/div[2]/ul/li[" + str(count) + "]/div/div/span"
+        focusPath = "//*[@id='provinceSel']/div[3]/div[3]/div[4]/div[2]/div[2]/div[1]/div[2]/ul/li[" + str(count) + "]/div/div/span"
         focus = browser.find_element_by_xpath(focusPath)
         browser.execute_script("alert(window.getComputedStyle(arguments[0],false).width);", focus)
         alert = browser.switch_to_alert()
-        time.sleep(0.8)
+        time.sleep(0.5)
         test = alert.text
         alert.accept()
-        #temp = float(test.replace("px" , '')) / 97 * 100
-        #percent = str(float('%.2f' % temp))
+        temp = float(test.replace("px" , '')) / 97 * 100
+        percent = str(float('%.2f' % temp)) + "%"
 
-        item += str(test)
+        item += percent
         print(item)
+        file.write(item)
+        file.write("\n")
         count += 1
 
-    '''
+
+    file.write("\n")
+    time.sleep(2)
+    
+
     # 选择中间的的省份
     browser.find_element_by_xpath("//*[@id='provinceSel']/div[3]/div[2]/div[2]/div/div[1]/div").click()
     time.sleep(1)
@@ -131,6 +141,37 @@ def getInfomation(province, city):
     browser.find_element_by_xpath("//div[@id='shiPanel']//a[@val='" + cityDict[city2] + "']").click()
     time.sleep(3)
 
+    file.write(province2 + "-" + city2)
+    file.write("\n")
+    # 关键词
+    count = 1
+    while count <= 50:
+        # 排名
+        item = str(count) + " "
+        # 关键词
+        keyWordPath = "//*[@id='provinceSel']/div[3]/div[3]/div[4]/div[2]/div[2]/div[2]/div[2]/ul/li[" + str(count) + "]/div/a"
+        item += browser.find_element_by_xpath(keyWordPath).text
+        item += " "
+        # 关注度
+        focusPath = "//*[@id='provinceSel']/div[3]/div[3]/div[4]/div[2]/div[2]/div[2]/div[2]/ul/li[" + str(count) + "]/div/div/span"
+        focus = browser.find_element_by_xpath(focusPath)
+        browser.execute_script("alert(window.getComputedStyle(arguments[0],false).width);", focus)
+        alert = browser.switch_to_alert()
+        time.sleep(0.5)
+        test = alert.text
+        alert.accept()
+        temp = float(test.replace("px" , '')) / 97 * 100
+        percent = str(float('%.2f' % temp)) + "%"
+
+        item += percent
+        print(item)
+        file.write(item)
+        file.write("\n")
+        count += 1
+
+    file.write("\n")
+    time.sleep(2)
+    
     # 选择最右边的省份
     browser.find_element_by_xpath("//*[@id='provinceSel']/div[3]/div[2]/div[3]/div/div[1]/div").click()
     time.sleep(1)
@@ -141,17 +182,47 @@ def getInfomation(province, city):
     time.sleep(1)
     browser.find_element_by_xpath("//div[@id='shiPanel']//a[@val='" + cityDict[city3] + "']").click()
     time.sleep(3)
-    '''
+
+    file.write(province3 + "-" + city3)
+    file.write("\n")
+    # 关键词
+    count = 1
+    while count <= 50:
+        # 排名
+        item = str(count) + " "
+        # 关键词
+        keyWordPath = "//*[@id='provinceSel']/div[3]/div[3]/div[4]/div[2]/div[2]/div[3]/div[2]/ul/li[" + str(count) + "]/div/a"
+        item += browser.find_element_by_xpath(keyWordPath).text
+        item += " "
+        # 关注度
+        focusPath = "//*[@id='provinceSel']/div[3]/div[3]/div[4]/div[2]/div[2]/div[3]/div[2]/ul/li[" + str(count) + "]/div/div/span"
+        focus = browser.find_element_by_xpath(focusPath)
+        browser.execute_script("alert(window.getComputedStyle(arguments[0],false).width);", focus)
+        alert = browser.switch_to_alert()
+        time.sleep(0.5)
+        test = alert.text
+        alert.accept()
+        temp = float(test.replace("px" , '')) / 97 * 100
+        percent = str(float('%.2f' % temp)) + "%"
+
+        item += percent
+        print(item)
+        file.write(item)
+        file.write("\n")
+        count += 1
 
 
+    
+
+    file.close()
 
 
 if __name__ == "__main__":
     province = input("请输入第一个省份：")
     city = input("请输入第一个城市：")
-    #province2 = input("请输入第二个省份：")
-    #city2 = input("请输入第二个城市：")
-    #province3 = input("请输入第三个省份：")
-    #city3 = input("请输入第三个城市：")
-    #getInfomation(province, city, province2, city2, province3, city3)
-    getInfomation(province, city)
+    province2 = input("请输入第二个省份：")
+    city2 = input("请输入第二个城市：")
+    province3 = input("请输入第三个省份：")
+    city3 = input("请输入第三个城市：")
+    getInfomation(province, city, province2, city2, province3, city3)
+    #getInfomation(province, city, province2, city2)

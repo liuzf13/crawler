@@ -68,61 +68,11 @@ def openbrowser():
     browser.find_element_by_id("TANGRAM__PSP_3__submit").click()
     print("准备打开新的窗口...")
 
-    '''
-    select = input("请观察浏览器网站是否已经登陆(y/n)：")
-    
-    while 1:
-        if select == "y" or select == "Y":
-            print("登陆成功！")
-            print("准备打开新的窗口...")
-            # time.sleep(1)
-            # browser.quit()
-            break
-
-        elif select == "n" or select == "N":
-            selectno = input("账号密码错误请按0，验证码出现请按1...")
-            # 账号密码错误则重新输入
-            if selectno == "0":
-
-                # 找到id="TANGRAM__PSP_3__userName"的对话框
-                # 清空输入框
-                browser.find_element_by_id("TANGRAM__PSP_3__userName").clear()
-                browser.find_element_by_id("TANGRAM__PSP_3__password").clear()
-
-                # 输入账号密码
-                account = []
-                try:
-                    fileaccount = open("../baidu/account.txt", encoding='UTF-8')
-                    accounts = fileaccount.readlines()
-                    for acc in accounts:
-                        account.append(acc.strip())
-                    fileaccount.close()
-                except Exception as err:
-                    print(err)
-                    input("请正确在account.txt里面写入账号密码")
-                    exit()
-
-                browser.find_element_by_id("TANGRAM__PSP_3__userName").send_keys(account[0])
-                browser.find_element_by_id("TANGRAM__PSP_3__password").send_keys(account[1])
-                # 点击登陆sign in
-                # id="TANGRAM__PSP_3__submit"
-                browser.find_element_by_id("TANGRAM__PSP_3__submit").click()
-
-            elif selectno == "1":
-                # 验证码的id为id="ap_captcha_guess"的对话框
-                input("请在浏览器中输入验证码并登陆...")
-                select = input("请观察浏览器网站是否已经登陆(y/n)：")
-
-        else:
-            print("请输入“y”或者“n”！")
-            select = input("请观察浏览器网站是否已经登陆(y/n)：")
-    '''
 
 def getindex(keyword, province, city, length):
     openbrowser()
     time.sleep(2)
 
-    
     # 这里开始进入百度指数
     # 要不这里就不要关闭了，新打开一个窗口
     # http://blog.csdn.net/DongGeGe214/article/details/52169761
@@ -149,6 +99,8 @@ def getindex(keyword, province, city, length):
     # 最大化窗口
     browser.maximize_window()
     time.sleep(2)
+
+
 
     # 选择城市
     # 要根据网站上的省份-编号和城市-编号构造map读取
@@ -194,7 +146,16 @@ def getindex(keyword, province, city, length):
     browser.find_element_by_xpath("//span[@class='selectA provA slided']//div//a[@href='#" + provinceDict[province] + "']").click()
     time.sleep(1)
     browser.find_element_by_xpath("//span[@class='selectA cityA slided']//div//a[@href='#" + cityDict[city] + "']").click()
-    time.sleep(2)
+    time.sleep(4)
+
+
+    # 读取最新的日期，作为爬取结束以及2017后半年鼠标移动间隔计算的依据
+    # 其实还有一个问题。如果在爬取过程中百度指数了，就尴尬了。。
+    timeText = browser.find_element_by_xpath('//*[@id="auto_gsid_7"]/span[2]').text
+    timeTextLen = len(timeText)
+    endDay = int(timeText[timeText.index("2017-12-") + 8 : timeTextLen])
+    print("endDay: " + str(endDay))
+    
 
     file = open("../baidu/index.txt", "w", encoding='UTF-8')
 
@@ -213,13 +174,12 @@ def getindex(keyword, province, city, length):
     # 储存数字的数组
     index = []
     try:
+        
         y_0 = 25
         monthDict = {'1':'31', '2':'28', '3':'31', '4':'30', '5':'31', '6':'30', '7':'31', '8':'31', '9':'30','10':'31','11':'30','12':'31'}
-        year = 2017
+        year = 2011
         day = 1
         month = 1
-        startMonth = "0" + str(month)
-        endMonth = "0" + str(month + 5)
         
         # 第一次选择搜索时间  2011.1-2011.6
         browser.find_elements_by_xpath("//div[@class='box-toolbar']/a")[6].click()
@@ -260,7 +220,7 @@ def getindex(keyword, province, city, length):
                 if year != 2017:
                     size = 6.633879781
                 else:
-                    size = 1214 / (153 + int(time.strftime("%d")) - 2 - 1) # 这里如果到2018年了还需要修改的
+                    size = 1214 / (153 + endDay - 1) # 这里如果到2018年了还需要修改的
 
             # 坐标偏移量
             if count == 0:
@@ -382,6 +342,13 @@ def getindex(keyword, province, city, length):
 
                         count = -1
                         isMove = 0
+
+                        if year == 2017:
+                            timeText = browser.find_element_by_xpath('//*[@id="auto_gsid_7"]/span[2]').text
+                            timeTextLen = len(timeText)
+                            endDay = int(timeText[timeText.index("2017-12-") + 8 : timeTextLen])
+                            print("endDay: " + str(endDay))
+
                 else:
                     day = 0
                     month = 1
@@ -444,7 +411,7 @@ def getindex(keyword, province, city, length):
                     count = -1
                     isMove = 0
 
-            if year == 2017 and month == 12 and day == int(time.strftime("%d")) - 2:
+            if year == 2017 and month == 12 and day == endDay:
                 break
 
             day += 1
@@ -452,8 +419,6 @@ def getindex(keyword, province, city, length):
             
             ActionChains(browser).move_to_element_with_offset(xoyelement, 0, 0).perform()
             time.sleep(1)
-
-
 
         #  移动趋势 这里需要重新切换年份
         print("mobile")
@@ -494,7 +459,13 @@ def getindex(keyword, province, city, length):
 
         # 选择移动趋势
         browser.find_element_by_class_name("icon-wise").click()
-        time.sleep(1)
+        time.sleep(4)
+
+        # 读取最新的日期，作为爬取结束以及2017后半年鼠标移动间隔计算的依据
+        timeText = browser.find_element_by_xpath('//*[@id="auto_gsid_7"]/span[2]').text
+        timeTextLen = len(timeText)
+        endDay = int(timeText[timeText.index("2017-12-") + 8 : timeTextLen])
+        print("endDay: " + str(endDay))
 
         # 第一次选择搜索时间  2011.1-2011.6
         browser.find_elements_by_xpath("//div[@class='box-toolbar']/a")[6].click()
@@ -531,7 +502,7 @@ def getindex(keyword, province, city, length):
                 if year != 2017:
                     size = 6.633879781
                 else:
-                    size = 1214 / (153 + int(time.strftime("%d")) - 2 - 1) # 这里如果到2018年了还需要修改的
+                    size = 1214 / (153 + endDay - 1) # 这里如果到2018年了还需要修改的
 
             # 坐标偏移量
             if count == 0:
@@ -653,6 +624,13 @@ def getindex(keyword, province, city, length):
 
                         count = -1
                         isMove = 0
+
+                        if year == 2017:
+                            timeText = browser.find_element_by_xpath('//*[@id="auto_gsid_7"]/span[2]').text
+                            timeTextLen = len(timeText)
+                            endDay = int(timeText[timeText.index("2017-12-") + 8 : timeTextLen])
+                            print("endDay: " + str(endDay))
+                        
                 else:
                     day = 0
                     month = 1
@@ -720,7 +698,7 @@ def getindex(keyword, province, city, length):
                     count = -1
                     isMove = 0
 
-            if year == 2017 and month == 12 and day == int(time.strftime("%d")) - 2:
+            if year == 2017 and month == 12 and day == endDay:
                 break
 
             day += 1
