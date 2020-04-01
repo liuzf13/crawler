@@ -10,8 +10,6 @@ venv
 dist
 build
 venv.txt
-*.jpg
-*.png
 *.log
 account.txt
 result.txt
