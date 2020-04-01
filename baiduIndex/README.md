@@ -4,7 +4,7 @@
 >
 > 2019-2020百度指数进行了一次大改版，目前是v2.0。相比于v1.0，v2.0的爬虫更加容易一些
 >
-> * 在v1.0中，每次移动鼠标，在图片中能看到指数结果，但是在开发者模式中看到的数据是加密过的，导致我们需要保存图片，并通过图像识别的方式来读取图片上的趋势结果![image](https://github.com/liuzf13/crawler/tree/master/images/baiduindex_example.jpg)
+> * 在v1.0中，每次移动鼠标，在图片中能看到指数结果，但是在开发者模式中看到的数据是加密过的，导致我们需要保存图片，并通过图像识别的方式来读取图片上的趋势结果![image](https://github.com/liuzf13/crawler/blob/master/images/baiduindex_example.jpg)
 >
 >   
 >
